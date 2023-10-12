@@ -1,0 +1,79 @@
+div#page > div {
+    background-color: burlywood;
+    /*font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;*/
+}
+
+div#page > div:only-child {
+     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+div.post span +span {
+    display: block;
+}
+div.post strong ~ strong {
+    font-size: small;
+  }
+
+div#menu > * {
+    display: inline;
+  }
+  
+  #page> *:is(#menu,ul)   {
+    text-transform: uppercase;
+  }
+
+  a:has(img) {
+    text-decoration: none;
+  }
+  
+  p:not(.articulos) {
+    border: 1px solid green;
+    padding: 8px;
+    background-color: white;
+  }
+  
+ #menu a:hover, .post a:hover {
+    background-color: cyan;
+    margin-bottom: 2px;
+  }
+  
+  a:not(:visited) {
+    color: green;
+    font-weight: bold;
+  }
+
+  a:visited {
+    color: black;
+    font-weight: bold;
+  }
+  
+  li:nth-child(even) {
+    background-color: red;
+  }
+
+  li:nth-child(odd) {
+    background-color: yellow;
+  }
+  
+  li:last-child {
+    background-color: aquamarine;
+  }
+
+  a[href="#acercade"]:target
+  {
+    color: white;
+    padding: 5px;
+    border: 3px solid orange;
+  }
+  
+  /* Nota para mi.
+  En la documentación dice que el uso de "target"
+  se usa mas bien en forma general
+  :target{ 
+
+  }
+
+  esto permite que todos los href="#algo" busquen su 
+  los elementos con el mismo id  Ejemplo <p id="#algo"
+  y aplica el formato.
+  */
