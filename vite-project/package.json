@@ -1,0 +1,26 @@
+{
+  "name": "vite-project",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "startlite": "lite-server",
+    "start": "eslint src/* && vite && echo 'Fin de ejecución... Matane!' || echo 'Hay errores.. lo siento'",
+    
+    "lint": "eslint src/*",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "eslint": "^8.51.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.28.1",
+    "lite-server": "^2.6.1",
+    "vite": "^4.4.5"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.4.2",
+    "bootstrap": "^5.3.2"
+  }
+}

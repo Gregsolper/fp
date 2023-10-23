@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AssbBook Lite</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/regular.css">
+    <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/fontawesome.css">
+    <script src="src/add-post.js" type="module"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">AssBook Lite</a>
+        <ul class="navbar-nav me-auto mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="add-post.html">New post</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <form action="#" class="mt-4" id="newPlace" novalidate>
+        <div class="mb-3">
+          <label for="title">Title</label>
+          <input
+            type="text"
+            class="form-control"
+            name="title"
+            id="title"
+            placeholder="Your post's title"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="description">Description</label>
+          <textarea
+            class="form-control"
+            id="description"
+            name="description"
+            rows="3"
+            placeholder="Write something..."
+          ></textarea>
+        </div>
+        <div class="mb-3">
+          <input type="radio" name="type" id="postPhoto" value="photo" checked>
+          <label for="postPhoto">Post Photo</label>
+          <input type="radio" name="type" id="postLocation" value="location" class="ms-3">
+          <label for="postLocation">Post location</label>
+        </div>
+        <div id="photo-group">
+          <div class="mb-3">
+            <label for="image">Photo</label>
+            <input type="file" class="form-control" id="image" name="image" />
+          </div>
+          <img src="" alt="" id="imgPreview" class="img-thumbnail d-none" />
+        </div>
+        <div id="location-group" class="mb-3 d-none">
+          <div id="location-container" class="mb-3">
+            <label for="place">Address</label>
+            <input
+              type="text"
+              class="form-control"
+              name="place"
+              id="place"
+              placeholder="Address"
+            />
+          </div>
+          <div id="map" >        
+          </div>
+          
+        </div>
+        <div class="mb-3">
+          <label for="mood">Mood</label>
+          <select class="form-select" name="mood" id="mood">
+            <option value="0">Neutral</option>
+            <option value="1">Happy</option>
+            <option value="2">Angry</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary btn-lg">Create</button>
+          </div>
+          <div class="col-auto">
+            <a class="btn btn-danger btn-lg" href="index.html">Cancel</a>
+          </div>
+          <div class="alert alert-danger col hidden" id="errorMsg">
+            A post can't be empty!
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
