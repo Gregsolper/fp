@@ -1,0 +1,130 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">{{ labelForm.headerTitle }}</a>
+  </div>
+</nav>
+
+<div class="container">
+  <form (ngSubmit)="addPost()" class="mt-4" id="newPlace" novalidate>
+    <div class="mb-3">
+      <label for="title">{{ labelForm.title }}</label>
+      <input
+        type="text"
+        class="form-control"
+        name="title"
+        id="title"
+        placeholder="Your post's title"
+        [(ngModel)]="newPost.title"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="description">{{ labelForm.description }}</label>
+      <textarea
+        class="form-control"
+        id="description"
+        name="description"
+        rows="3"
+        placeholder="Write something..."
+        [(ngModel)]="newPost.description"
+      ></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="image"> {{ labelForm.photo }} </label>
+      <input
+        type="file"
+        class="form-control"
+        id="image"
+        name="image"
+        (change)="changeImage($event)"
+        [(ngModel)]="imageName"
+      />
+    </div>
+    @if ( newPost.image != "") {
+    <img [src]="newPost.image" alt="" id="imgPreview" class="img-thumbnail" />
+    }
+    <div class="mb-3">
+      <label for="mood">{{ labelForm.mood }}</label>
+      <select
+        class="form-select"
+        name="mood"
+        id="mood"
+        [(ngModel)]="newPost.mood"
+      >
+        <option value="0">{{ labelForm.neutral }}</option>
+        <option value="1">{{ labelForm.happy }}</option>
+        <option value="2">{{ labelForm.angry }}</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary btn-lg">
+          {{ labelForm.create }}
+        </button>
+      </div>
+      <div class="alert alert-danger col hidden" id="errorMsg">
+        {{ labelForm.warning }}
+      </div>
+    </div>
+  </form>
+
+  <div id="postContainer">
+    @if (posts.length>0) {
+    <br />
+    <h3>POST LIST:</h3>
+    <br />
+    }
+    @for ( item of posts ; track item.id) {
+    <div
+      [ngClass]="{
+        'border-success': item.mood === 1,
+        'border-danger': item.mood === 2,
+        'mb-4' : true,
+        'card':true,
+        'shadow': true
+      }"
+    >
+      <img class="card-img-top" [src]="item.image" />
+      @if (item.title === "" && item.description ==="") {
+      <div class="card-body">
+        <h5 class="card-title">{{ item.title }}</h5>
+        <p class="card-text" [innerText]=item.description ></p>
+      </div>
+    }
+      <div class="card-footer bg-transparent">
+        <div class="row">
+          <div class="col-auto avatar ps-1 pe-1">
+            <img src="./assets/avatar.png" class="rounded-circle" />
+          </div>
+          <div class="col">
+            <div class="name">Bad guy</div>
+            <div>
+              <small class="text-muted">{{ datePost }} </small>
+            </div>
+          </div>
+          <div class="col-auto pt-2">
+            <i (click)="likeIt(item)"
+              [ngClass]="{
+                'fa-regular' : true,
+                'fa-thumbs-up' : true,
+                'me-3' : true,
+                'text-primary' : item.likes === true
+              }"
+            ></i>
+            <i (click)="disLikeIt(item)"
+              [ngClass]="{
+                'fa-regular' : true,
+                'fa-thumbs-down' : true,
+                'me-3' : true,
+                'text-danger' : item.likes === false
+              }"
+            ></i>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  }
+  </div>
+</div>
+
