@@ -1,0 +1,52 @@
+<div
+      [ngClass]="{
+        'border-success': (+item.mood === 1),
+        'border-danger': (+item.mood === 2),
+        'mb-4' : true,
+        'card':true,
+        'shadow': true
+      }"
+    >
+
+      <img class="card-img-top" [src]="item.image" />
+      @if (item.title != "" || item.description !="") {
+      <div class="card-body">
+        <h5 class="card-title">{{ item.title }}</h5>
+        <p class="card-text" [innerText]=item.description ></p>
+      </div>
+    }
+      <div class="card-footer bg-transparent">
+        <div class="row">
+          <div class="col-auto avatar ps-1 pe-1">
+            <img src="./assets/avatar.png" class="rounded-circle" />
+          </div>
+          <div class="col">
+            <div class="name">Bad guy</div>
+            <div>
+              <small class="text-muted">{{ item.date  | datePipe }} </small>
+            </div>
+          </div>
+          <div class="col-auto">
+            <button (click)="informDelete()"  class="btn btn-danger mr-3 h-100 delete">Delete</button>
+          </div>
+          <div class="col-auto pt-2">
+            <i (click)="likeIt(item)"
+              [ngClass]="{
+                'fa-regular' : true,
+                'fa-thumbs-up' : true,
+                'me-3' : true,
+                'text-primary' : item.likes === true
+              }"
+            ></i>
+            <i (click)="disLikeIt(item)"
+              [ngClass]="{
+                'fa-regular' : true,
+                'fa-thumbs-down' : true,
+                'me-3' : true,
+                'text-danger' : item.likes === false
+              }"
+            ></i>
+          </div>
+        </div>
+      </div>
+    </div>

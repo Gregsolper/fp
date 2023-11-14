@@ -1,39 +1,14 @@
-.card-footer .avatar img {
-  width: 50px;
-  cursor: pointer;
-}
 
-.card-footer .name {
-  color: #385898;
+
+#headList {
+  color: aliceblue;
+  font-size:larger;
   font-weight: bold;
-  cursor: pointer;
+  text-align: center;
+  margin-top: 25px;
+background-color: rgb(1, 23, 23);
 }
-
-.card-footer .name:hover {
-  text-decoration: underline;
-}
-
-.card-footer .fa-thumbs-up, .card-footer .fa-thumbs-down {
-  cursor: pointer;
-  font-size: 1.5em;
-}
-
-.card.border-success {
-  box-shadow: 0 .5rem 1rem rgba(0,80,0,.2) !important;
-  border: 2px solid green !important;
-}
-
-
-.card.border-danger {
-  box-shadow: 0 .5rem 1rem rgba(140,0,0,.2) !important;
-  border-block-color: red;
-}
-
-#errorMsg.hidden {
-  opacity: 0;
-}
-
-#errorMSg {
-  opacity: 1;
-  transition: opacity .5s linear;
+#navSearch {
+  margin-top: 15px;
+  margin-bottom: 30px;
 }

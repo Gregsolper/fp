@@ -1,18 +1,23 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Post } from '../post';
+import { DatePipePipe } from "../pipes/date-pipe.pipe";
+import { PostFormComponent } from '../post-form/post-form.component';
+import { PostCardComponent } from '../post-card/post-card.component';
+import { PostFilterPipe } from '../pipes/post-filter.pipe';
 import { FormsModule } from '@angular/forms';
 
-
-
-
-
 @Component({
-  selector: 'posts-page',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './posts-page.component.html',
-  styleUrl: './posts-page.component.css',
+    selector: 'posts-page',
+    standalone: true,
+    templateUrl: './posts-page.component.html',
+    styleUrl: './posts-page.component.css',
+    imports: [CommonModule,
+       DatePipePipe,
+       FormsModule,
+       PostFormComponent,
+       PostCardComponent,
+      PostFilterPipe]
 })
 
 
@@ -31,78 +36,24 @@ export class PostsPageComponent {
     warning: "A post can't be empty!",
   };
 
+  search? : string;
   posts: Post[] = [];
-  newPost: Post = {
-    mood: 0,
-    image: "",
-    likes: null,
-    title:"",
-    description:""
-  };
-  imageName = "";
 
   numId = 1;
-  datePost = this.dateToString(new Date ());
 
+/**
+ * Event tiggerred by postForm
+ * @param newPost
+ */
+  addToPosts( newPost : Post) {
 
-
-  changeImage (event:Event) {
-    const fileInput = event.target as HTMLInputElement;
-    if (!fileInput.files||fileInput.files.length===0) return;
-    const reader = new FileReader ();
-    reader.readAsDataURL ( fileInput.files[0]);
-    reader.addEventListener('loadend', (e)=>{
-      this.newPost.image = reader.result as string;
-    });
-  }
-
-  addPost() {
-    this.newPost.id = this.numId;
+    newPost.id = this.numId;
     ++this.numId;
-    this.newPost.date = this.datePost;
-    this.posts.push(this.newPost);
-    this.imageName = '';
-    this.resetPost();
+    this.posts =  [...this.posts,newPost];
   }
 
-  private resetPost() {
-    this.newPost = {
-      id : 0,
-      title :"",
-      description: "",
-      mood: 0,
-      image:"",
-      date:"",
-      likes: null,
-    };
-  }
-
-  private dateToString (dateOrg : Date) : string {
-    const formatDate = new Intl.DateTimeFormat('en-US', {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: false
-    } );
-    return formatDate.format(dateOrg);
-
-  }
-
-  likeIt ( post : Post) {
-    if ( post.likes === true ) {
-      post.likes = null;
-    } else {
-      post.likes = true;
-    }
-  }
-
-  disLikeIt (post : Post) {
-    if ( post.likes === false ) {
-      post.likes = null;
-    } else {
-      post.likes = false;
-    }
+  deletePost (idToDelete:number | undefined){
+    if (idToDelete)
+      this.posts = this.posts.filter(post => post.id != idToDelete);
   }
 }

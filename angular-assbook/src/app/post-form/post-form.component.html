@@ -1,0 +1,63 @@
+<form (ngSubmit)="addPost()" class="mt-4" id="newPlace" novalidate>
+  <div class="mb-3">
+    <label for="title">{{ labelForm.title }}</label>
+    <input
+      type="text"
+      class="form-control"
+      name="title"
+      id="title"
+      placeholder="Your post's title"
+      [(ngModel)]="newPost.title"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="description">{{ labelForm.description }}</label>
+    <textarea
+      class="form-control"
+      id="description"
+      name="description"
+      rows="3"
+      placeholder="Write something..."
+      [(ngModel)]="newPost.description"
+    ></textarea>
+  </div>
+  <div class="mb-3">
+    <label for="image"> {{ labelForm.photo }} </label>
+    <input
+      type="file"
+      class="form-control"
+      id="image"
+      name="image"
+      (change)="changeImage($event)"
+      [(ngModel)]="imageName"
+    />
+  </div>
+  @if ( newPost.image != "") {
+  <img [src]="newPost.image" alt="" id="imgPreview" class="img-thumbnail" />
+  }
+  <div class="mb-3">
+    <label for="mood">{{ labelForm.mood }}</label>
+    <select
+      class="form-select"
+      name="mood"
+      id="mood"
+      [(ngModel)]="newPost.mood"
+    >
+      <option value="0">{{ labelForm.neutral }}</option>
+      <option value="1">{{ labelForm.happy }}</option>
+      <option value="2">{{ labelForm.angry }}</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary btn-lg">
+        {{ labelForm.create }}
+      </button>
+    </div>
+    <div class="alert alert-danger col hidden" id="errorMsg">
+      {{ labelForm.warning }}
+    </div>
+  </div>
+</form>
+

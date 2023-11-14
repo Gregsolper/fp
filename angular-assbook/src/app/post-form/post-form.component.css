@@ -1,0 +1,8 @@
+#errorMsg.hidden {
+  opacity: 0;
+}
+
+#errorMSg {
+  opacity: 1;
+  transition: opacity .5s linear;
+}
