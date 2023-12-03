@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Post } from '../post';
+import { Post } from '../interfaces/post';
 import { DatePipePipe } from '../pipes/date-pipe.pipe';
 import { FormsModule } from '@angular/forms';
 

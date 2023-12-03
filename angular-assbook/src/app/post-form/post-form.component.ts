@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Post } from '../post';
+import { Post } from '../interfaces/post';
 import { FormsModule } from '@angular/forms';
+import { User } from '../interfaces/user';
 
 @Component({
   selector: 'post-form',
@@ -25,12 +26,24 @@ export class PostFormComponent {
     angry: 'Angry',
     warning: "A post can't be empty!",
   };
+  nuevoUsuario : User = {
+    name: '',
+    email: '',
+    avatar: '',
+    lat: 0,
+    lng: 0
+  };
   newPost: Post = {
     mood: 0,
     image: "",
     likes: null,
-    title:"",
-    description:""
+    title: "",
+    description: "",
+    id: 0,
+    date: '',
+    totalLikes: 0,
+    creator: this.nuevoUsuario,
+    mine: false
   };
   imageName = "";
 
@@ -47,14 +60,19 @@ export class PostFormComponent {
 
   private resetPost() {
     this.newPost = {
-      id : 0,
-      title :"",
-      description: "",
       mood: 0,
-      image:"",
-      date:"",
+      image: "",
       likes: null,
+      title: "",
+      description: "",
+      id: 0,
+      date: '',
+      totalLikes: 0,
+      creator: this.nuevoUsuario,
+      mine: false
     };
+
+
   }
 
   addPost() {

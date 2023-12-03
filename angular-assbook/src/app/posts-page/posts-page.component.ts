@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Post } from '../post';
+import { Post } from '../interfaces/post';
 import { DatePipePipe } from "../pipes/date-pipe.pipe";
 import { PostFormComponent } from '../post-form/post-form.component';
 import { PostCardComponent } from '../post-card/post-card.component';
