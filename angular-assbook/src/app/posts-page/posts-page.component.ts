@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Post } from '../interfaces/post';
 import { DatePipePipe } from "../pipes/date-pipe.pipe";
@@ -6,6 +6,8 @@ import { PostFormComponent } from '../post-form/post-form.component';
 import { PostCardComponent } from '../post-card/post-card.component';
 import { PostFilterPipe } from '../pipes/post-filter.pipe';
 import { FormsModule } from '@angular/forms';
+import { PostsService } from '../service/posts.service';
+
 
 @Component({
     selector: 'posts-page',
@@ -21,7 +23,26 @@ import { FormsModule } from '@angular/forms';
 })
 
 
-export class PostsPageComponent {
+export class PostsPageComponent implements OnInit{
+
+  #postService = inject (PostsService);
+  // PostsService ();
+
+  ngOnInit(): void {
+    this.#postService.getAll()
+    .subscribe({
+      next: (posts)=>(this.posts=posts),
+      error: (error)=> console.error (error)  });
+
+  //   .then ((postResp)=> {
+  //     this.posts = postResp.posts;
+  //   })
+  //   .catch((error) => {
+  //     alert ("error en la carga"+error.message);
+  //     // Swal.fire("Post", error.message, "info");
+  // });
+
+  }
 
   labelForm = {
     headerTitle: 'AssBook',
