@@ -7,6 +7,7 @@ import { PostCardComponent } from '../post-card/post-card.component';
 import { PostFilterPipe } from '../pipes/post-filter.pipe';
 import { FormsModule } from '@angular/forms';
 import { PostsService } from '../service/posts.service';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -26,10 +27,12 @@ import { PostsService } from '../service/posts.service';
 export class PostsPageComponent implements OnInit{
 
   #postService = inject (PostsService);
-  // PostsService ();
+  #titleService = inject (Title);
+
 
   ngOnInit(): void {
-    this.#postService.getAll()
+    this.#titleService.setTitle("Posts|All");
+    this.#postService.getPosts()
     .subscribe({
       next: (posts)=>(this.posts=posts),
       error: (error)=> console.error (error)  });
@@ -68,13 +71,23 @@ export class PostsPageComponent implements OnInit{
  */
   addToPosts( newPost : Post) {
 
-    newPost.id = this.numId;
-    ++this.numId;
-    this.posts =  [...this.posts,newPost];
+    this.#postService.addPost(newPost)
+    .subscribe({
+
+      error: (error)=> console.error (error)  });
+
+    //newPost.id = this.numId;
+    //++this.numId;
+    this.posts =  [newPost,...this.posts];
   }
 
   deletePost (idToDelete:number | undefined){
-    if (idToDelete)
+    if (idToDelete){
       this.posts = this.posts.filter(post => post.id != idToDelete);
+      this.#postService.deletePost(idToDelete).subscribe({
+
+        error: (error)=> console.error (error)  });
+
+    }
   }
 }

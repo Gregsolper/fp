@@ -1,8 +1,10 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Post } from '../interfaces/post';
 import { FormsModule } from '@angular/forms';
-import { User } from '../interfaces/user';
+import { PostsService } from '../service/posts.service';
+import { Router } from '@angular/router';
+import { CanComponentDeactivate } from '../interfaces/can-component-deactivate';
 
 @Component({
   selector: 'post-form',
@@ -11,8 +13,11 @@ import { User } from '../interfaces/user';
   templateUrl: './post-form.component.html',
   styleUrl: './post-form.component.css'
 })
-export class PostFormComponent {
+export class PostFormComponent implements CanComponentDeactivate {
 @Output () publishedPost = new EventEmitter<Post>();
+#postService = inject (PostsService);
+#router = inject (Router);
+saved : boolean = false;
 
   labelForm = {
     headerTitle: 'AssBook',
@@ -26,13 +31,7 @@ export class PostFormComponent {
     angry: 'Angry',
     warning: "A post can't be empty!",
   };
-  nuevoUsuario : User = {
-    name: '',
-    email: '',
-    avatar: '',
-    lat: 0,
-    lng: 0
-  };
+
   newPost: Post = {
     mood: 0,
     image: "",
@@ -41,47 +40,44 @@ export class PostFormComponent {
     description: "",
     id: 0,
     date: '',
-    totalLikes: 0,
-    creator: this.nuevoUsuario,
-    mine: false
+    place: "",
+      lat : 0,
+      lng : 0
   };
   imageName = "";
 
+  canDeactivate(){
+    return this.saved || confirm ("Do you want to leave this peage losting the data?")
+  }
   changeImage (event:Event) {
     const fileInput = event.target as HTMLInputElement;
     if (!fileInput.files||fileInput.files.length===0) return;
     const reader = new FileReader ();
     reader.readAsDataURL ( fileInput.files[0]);
-    reader.addEventListener('loadend', (e)=>{
+    reader.addEventListener('loadend', ()=>{
       this.newPost.image = reader.result as string;
     });
   }
 
-
-  private resetPost() {
-    this.newPost = {
-      mood: 0,
-      image: "",
-      likes: null,
-      title: "",
-      description: "",
-      id: 0,
-      date: '',
-      totalLikes: 0,
-      creator: this.nuevoUsuario,
-      mine: false
-    };
-
-
-  }
-
   addPost() {
-
     this.newPost.date = this.dateToString(new Date);
-    this.publishedPost.emit (this.newPost);
+    this.newPost.mood= +this.newPost.mood;
+    //this.publishedPost.emit (this.newPost);
 
-    this.imageName = '';
-    this.resetPost();
+    //this.imageName = '';
+    //this.resetPost();
+    this.#postService.addPost(this.newPost)
+    .subscribe({
+      next: (post)=>{ console.log("added:"+post);
+                      this.saved = true; },
+      error: (error)=> {
+          console.error ("No added **"+error);
+          this.imageName="";
+          this.newPost.image="";
+          alert ('Not added');},
+      complete: ()=>  this.#router.navigate (['/posts'])
+    });
+
   }
 
   private dateToString (dateOrg : Date) : string {
@@ -96,5 +92,4 @@ export class PostFormComponent {
     return formatDate.format(dateOrg);
 
   }
-
 }

@@ -1,1 +1,8 @@
-<p>post-detail works!</p>
+<div class="mt-4">
+  <post-card [item]="item" (deletedPost)="deletePost(item.id)" />
+</div>
+<div class="mt-4 mb-4">
+  <button (click)="goPosts()" class="btn btn-danger mr-3 h-100 delete">
+    Go Back
+  </button>
+</div>

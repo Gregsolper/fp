@@ -1,10 +1,7 @@
-import { Post } from '../interfaces/post';
+import { Like, Post } from '../interfaces/post';
 import { Injectable, inject } from '@angular/core';
-import { HttpService } from './http.service';
-import {PostsResponse, SinglePostResponse, LikeResponse,CommentsResponse, CommentResponse} from '../interfaces/responses';
+import { PostsResponse, SinglePostResponse} from '../interfaces/responses';
 import { SERVER } from '../constants';
-import { CommentInsert } from '../interfaces/comment';
-import { PostInsert } from '../interfaces/post';
 import { Observable, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -14,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 export class PostsService {
   //#http = new HttpService();
   #http = inject (HttpClient);
-
+  postUrl='posts';
   constructor() {
 
   }
@@ -31,7 +28,7 @@ export class PostsService {
 
    getPosts () : Observable<Post[]> {
     return this.#http
-      .get<PostsResponse>(`${SERVER}/posts`)
+      .get<PostsResponse>(this.postUrl)
       .pipe(map((resp=>resp.posts)));
    }
 /*
@@ -49,6 +46,11 @@ export class PostsService {
  * @link \interfaces\responses.ts
  *
  */
+getPost (id:number) : Observable<Post> {
+  return this.#http
+    .get<SinglePostResponse>(`${this.postUrl}/${id}`)
+    .pipe(map((resp=>resp.post)));
+}
 // async get(postId: number): Promise<SinglePostResponse> {
 //     return this.#http.get<SinglePostResponse>(`${SERVER}/posts/${postId}`);
 // }
@@ -64,6 +66,11 @@ export class PostsService {
  * @link \interfaces\responses.ts
  *
  */
+addPost(post:Post):Observable<Post>{
+  return this.#http
+    .post<SinglePostResponse>(`${this.postUrl}`,post)
+    .pipe(map((resp)=>resp.post));
+}
 // async post(post: PostInsert): Promise<PostsResponse> {
 //     return this.#http.post<PostsResponse, PostInsert>(
 //         `${SERVER}/posts`,
@@ -78,6 +85,10 @@ export class PostsService {
  * @param postId Post's identification : number
  * @returns void
  */
+
+deletePost(id:number):Observable<void>{
+  return this.#http.delete<void>(`${this.postUrl}/${id}`);
+}
 // async delete(postId: number): Promise<void> {
 //     return this.#http.delete<void>(`${SERVER}/posts/${postId}`);
 // }
@@ -93,6 +104,12 @@ export class PostsService {
  * @link \interfaces\responses.ts
  *
  */
+addVote (id:number,likes:boolean): Observable<void>
+{
+  const body : Like = { "likes": likes};
+  return this.#http.post<void> (`${this.postUrl}/${id}/likes`,body);
+}
+
 // async postVote(postId: number, vote: boolean): Promise<LikeResponse> {
 //     return this.#http.post(`${SERVER}/posts/${postId}/likes`, {
 //         likes: vote,
@@ -100,13 +117,16 @@ export class PostsService {
 //}
 /**
  *
- * DELETE a post
+ * DELETE vote's  post
  *
  * @param postId Post's identification : number
  * @returns LikeResponse
  * @see LikeResponse
  * @link \interfaces\responses.ts
  */
+deleteVote (id:number): Observable<void>{
+  return this.#http.delete<void>  (`${this.postUrl}/${id}/likes`);
+}
 // async deleteVote(postId: number): Promise<LikeResponse> {
 //     return this.#http.delete(`${SERVER}/posts/${postId}/likes`);
 // }
