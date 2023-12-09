@@ -4,7 +4,7 @@ import { EMPTY, catchError } from 'rxjs';
 import { inject } from '@angular/core';
 import { Post } from '../interfaces/post';
 
-export const postResolver: ResolveFn<Post> = (route, state) => {
+export const postResolver: ResolveFn<Post> = (route) => {
 
   return inject(PostsService).getPost (+route.params['id']).pipe(
     catchError((error)=>{

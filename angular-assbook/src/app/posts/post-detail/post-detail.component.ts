@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject, numberAttribute } from '@angular/core';
+import { Component, Input, OnInit, inject, } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PostsService } from '../service/posts.service';
 import { PostCardComponent } from '../post-card/post-card.component';

@@ -1,4 +1,4 @@
-import { CommentPost } from "../interfaces/comment";
+import { CommentPost } from "./comment";
 import { Post } from "./post";
 import { User } from "./user";
 

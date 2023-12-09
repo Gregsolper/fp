@@ -1,7 +1,6 @@
 import { Like, Post } from '../interfaces/post';
 import { Injectable, inject } from '@angular/core';
 import { PostsResponse, SinglePostResponse} from '../interfaces/responses';
-import { SERVER } from '../constants';
 import { Observable, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
