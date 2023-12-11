@@ -1,4 +1,12 @@
-<form (ngSubmit)="addPost()" class="mt-4" id="newPlace" novalidate>
+<form
+
+  [formGroup]="postForm"
+  (ngSubmit)="addPost()"
+  class="mt-4"
+  id="newPlace"
+  novalidate
+
+>
   <div class="mb-3">
     <label for="title">{{ labelForm.title }}</label>
     <input
@@ -7,8 +15,26 @@
       name="title"
       id="title"
       placeholder="Your post's title"
-      [(ngModel)]="newPost.title"
+      formControlName="title"
+      [ngClass]="
+        validClasses(postForm.controls.title, 'is-valid', 'is-invalid')
+      "
     />
+    @if (postForm.controls.title.errors?.['minlength']) {
+    <div class="invalid-feedback">
+      You mus enter at least
+      {{
+  postForm.controls.title.errors?.['minlength'].requiredLength
+  - postForm.controls.title.errors?.['minlength'].actualLength
+      }}
+      characters more.
+    </div>
+    } @if (postForm.controls.title.errors?.['pattern']) {
+    <div class="invalid-feedback">
+      The first character must be a letter and only letters and spaces are
+      accepted
+    </div>
+    }
   </div>
   <div class="mb-3">
     <label for="description">{{ labelForm.description }}</label>
@@ -18,8 +44,21 @@
       name="description"
       rows="3"
       placeholder="Write something..."
-      [(ngModel)]="newPost.description"
+      formControlName="description"
+      [ngClass]="
+        validClasses(postForm.controls.description, 'is-valid', 'is-invalid')
+      "
     ></textarea>
+    @if (postForm.controls.description.errors?.['minlength']) {
+    <div class="invalid-feedback">
+      You mus enter at least
+      {{
+    postForm.controls.description.errors?.['minlength'].requiredLength
+    - postForm.controls.description.errors?.['minlength'].actualLength
+      }}
+      characters more.
+    </div>
+    }
   </div>
   <div class="mb-3">
     <label for="image"> {{ labelForm.photo }} </label>
@@ -29,29 +68,29 @@
       id="image"
       name="image"
       (change)="changeImage($event)"
-      [(ngModel)]="imageName"
+      formControlName="image"
     />
+    <!--[(ngModel)]="imageName" -->
   </div>
-  @if ( newPost.image != "") {
-  <img [src]="newPost.image" alt="" id="imgPreview" class="img-thumbnail" />
+  @if ( imageName != "") {
+  <img [src]="imageName" alt="" id="imgPreview" class="img-thumbnail" />
   }
   <div class="mb-3">
     <label for="mood">{{ labelForm.mood }}</label>
-    <select
-      class="form-select"
-      name="mood"
-      id="mood"
-      [(ngModel)]="newPost.mood"
-    >
-      <option value=0>{{ labelForm.neutral }}</option>
-      <option value=1>{{ labelForm.happy }}</option>
-      <option value=2>{{ labelForm.angry }}</option>
+    <select class="form-select" name="mood" id="mood" formControlName="mood">
+      <option value="0">{{ labelForm.neutral }}</option>
+      <option value="1">{{ labelForm.happy }}</option>
+      <option value="2">{{ labelForm.angry }}</option>
     </select>
   </div>
 
   <div class="row">
     <div class="col-auto">
-      <button type="submit" class="btn btn-primary btn-lg">
+      <button
+        type="submit"
+        class="btn btn-primary btn-lg"
+        [disabled]="postForm.invalid || postForm.untouched"
+      >
         {{ labelForm.create }}
       </button>
     </div>
@@ -61,3 +100,8 @@
   </div>
 </form>
 
+@if (postForm.touched &&  formRequired() ) {
+<div class="col my-auto text-danger">
+  The post must have at least a title, a description, or an image
+</div>
+}
