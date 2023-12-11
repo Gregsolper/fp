@@ -1,32 +1,4 @@
-
-<nav class="navbar navbar-expand navbar-dark bg-dark mb-4">
-  <div class="container-fluid">
-    <a class="navbar-brand" [routerLink]="['/posts']">{{ title }}</a>
-    <ul class="navbar-nav me-auto">
-      <li class="nav-item">
-        <a
-          class="nav-link"
-          [routerLink]="['/posts']"
-          [routerLinkActive]="['active']"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
-          Home
-        </a>
-      </li>
-      <li class="nav-item">
-        <a
-          class="nav-link"
-          [routerLink]="['/posts/add']"
-          [routerLinkActive]="['active']"
-        >
-          New Post
-        </a>
-      </li>
-    </ul>
-  </div>
-</nav>
-
-
+<menu></menu>
 <div class="container">
   <router-outlet></router-outlet>
 </div>
