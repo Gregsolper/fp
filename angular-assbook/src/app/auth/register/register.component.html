@@ -1,0 +1,165 @@
+<div class="container">
+  <form
+    [formGroup]="userForm"
+    (ngSubmit)="registerUser()"
+    id="form-register"
+    class="mt-4"
+    novalidate
+
+  >
+    <legend>Create an account</legend>
+
+    <div class="mb-3">
+      <label for="name">Name:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="name"
+        name="nameUser"
+        placeholder="Name"
+        formControlName="name"
+        [ngClass]="
+          validClasses(userForm.controls.name, 'is-valid', 'is-invalid')
+        "
+      />
+      @if (userForm.controls.name.errors?.['minlength']){
+      <div class="invalid-feedback">
+        You must enter at least
+        {{
+            userForm.controls.name.errors?.['minlength'].requiredLength
+          - userForm.controls.name.errors?.['minlength'].actualLength
+        }}
+        characters more.
+      </div>
+      }
+      @if (userForm.controls.name.errors?.['required']) {
+          <div class="invalid-feedback">Give a name is mandatory</div>
+      }
+    </div>
+    <div class="mb-3">
+      <label for="email">Email:</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        name="email"
+        placeholder="Email"
+        formControlName="email"
+        [ngClass]="
+          validClasses(userForm.controls.email, 'is-valid', 'is-invalid')
+        "
+      />
+
+      @if (userForm.controls.email.errors?.['required']) {
+      <div class="invalid-feedback">Give an email is mandatory</div>
+      }
+      @if (userForm.controls.email.errors?.['email']) {
+      <div class="invalid-feedback">Email has an invalid format</div>
+      }
+
+    </div>
+    <div class="mb-3">
+      <label for="email2">Repeat Email:</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email2"
+        name="email2"
+        placeholder="Email"
+        formControlName="email2"
+
+        [ngClass]="
+          validClasses(userForm.controls.email2, 'is-valid', 'is-invalid')
+        "
+      />
+      @if (userForm.controls.email2.errors?.['required']) {
+      <div class="invalid-feedback">Give a email's confirmation is mandatory</div>
+      }
+      @if (userForm.controls.email2.errors?.['email']) {
+        <div class="invalid-feedback">Email has an invalid format</div>
+        }
+      @if ( userForm.errors?.['misMatch'] && userForm.controls.email.touched) {
+        <div class="text-danger">Confirmation email should match with the first</div>
+        <div class="invalid-feedback" >**</div>
+      }
+    </div>
+    <div class="mb-3">
+      <label for="password">Password:</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        name="password"
+        placeholder="Password"
+        formControlName="password"
+        [ngClass]="
+          validClasses(userForm.controls.password, 'is-valid', 'is-invalid')
+        "
+      />
+      @if (userForm.controls.password.errors?.['minlength']){
+        <div class="invalid-feedback">
+          You must enter at least
+          {{
+              userForm.controls.password.errors?.['minlength'].requiredLength
+            - userForm.controls.password.errors?.['minlength'].actualLength
+          }}
+          characters more.
+        </div>
+        }
+        @if (userForm.controls.password.errors?.['required']) {
+            <div class="invalid-feedback">Have a password is mandatory</div>
+        }
+    </div>
+    <div class="form-row">
+      <div class="mb-3 col">
+        <label for="lat">Latitude:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="lat"
+          name="lat"
+          placeholder="Geolocating..."
+          formControlName="lat"
+          readonly
+        />
+      </div>
+      <div class="mb-3 col">
+        <label for="lng">Longitude:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="lng"
+          name="lng"
+          placeholder="Geolocating..."
+          formControlName="lng"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="avatar">Avatar image</label>
+      <input
+        type="file"
+        class="form-control"
+        id="avatar"
+        name="avatar"
+        (change)="changeImage($event)"
+        formControlName="avatar"
+      />
+    </div>
+    @if ( imageName != "") {
+    <img [src]="imageName" alt="" id="imgPreview" class="img-thumbnail" />
+    } @else {
+
+        <div class="invalid-feedback">Avatar is required</div>
+
+    }
+    <p class="text-danger" id="errorInfo"></p>
+
+    <button type="none"  class="btn btn-secondary" (click)="goBack()">Go back</button>
+
+    @if (userForm.valid) {
+         <button type="submit" class="btn btn-primary">Create account</button>
+    }
+  </form>
+</div>

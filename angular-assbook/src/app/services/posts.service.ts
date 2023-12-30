@@ -1,8 +1,9 @@
 import { Like, Post } from '../interfaces/post';
 import { Injectable, inject } from '@angular/core';
-import { PostsResponse, SinglePostResponse} from '../interfaces/responses';
+import { CommentResponse, CommentsResponse, LikeResponse, PostsResponse, SinglePostResponse} from '../interfaces/responses';
 import { Observable, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { CommentInsert } from '../interfaces/comment';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +47,7 @@ export class PostsService {
  *
  */
 getPost (id:number) : Observable<Post> {
+
   return this.#http
     .get<SinglePostResponse>(`${this.postUrl}/${id}`)
     .pipe(map((resp=>resp.post)));
@@ -70,6 +72,13 @@ addPost(post:Post):Observable<Post>{
     .post<SinglePostResponse>(`${this.postUrl}`,post)
     .pipe(map((resp)=>resp.post));
 }
+
+updatePost(post:Post):Observable<Post>{
+  return this.#http
+    .put<SinglePostResponse>(`${this.postUrl}/${post.id}`,post)
+    .pipe(map((resp)=>resp.post));
+}
+
 // async post(post: PostInsert): Promise<PostsResponse> {
 //     return this.#http.post<PostsResponse, PostInsert>(
 //         `${SERVER}/posts`,
@@ -103,10 +112,10 @@ deletePost(id:number):Observable<void>{
  * @link \interfaces\responses.ts
  *
  */
-addVote (id:number,likes:boolean): Observable<void>
+addVote (id:number,likes:boolean): Observable<LikeResponse>
 {
   const body : Like = { "likes": likes};
-  return this.#http.post<void> (`${this.postUrl}/${id}/likes`,body);
+  return this.#http.post<LikeResponse> (`${this.postUrl}/${id}/likes`,body);
 }
 
 // async postVote(postId: number, vote: boolean): Promise<LikeResponse> {
@@ -123,8 +132,8 @@ addVote (id:number,likes:boolean): Observable<void>
  * @see LikeResponse
  * @link \interfaces\responses.ts
  */
-deleteVote (id:number): Observable<void>{
-  return this.#http.delete<void>  (`${this.postUrl}/${id}/likes`);
+deleteVote (id:number): Observable<LikeResponse>{
+  return this.#http.delete<LikeResponse>  (`${this.postUrl}/${id}/likes`);
 }
 // async deleteVote(postId: number): Promise<LikeResponse> {
 //     return this.#http.delete(`${SERVER}/posts/${postId}/likes`);
@@ -143,7 +152,9 @@ deleteVote (id:number): Observable<void>{
 // async getComments(postId: number): Promise<CommentsResponse> {
 //     return this.#http.get(`${SERVER}/posts/${postId}/comments`);
 // }
-
+getComments (postId:number): Observable<CommentsResponse>{
+  return this.#http.get<CommentsResponse>(`${this.postUrl}/${postId}/comments`);
+}
 /**
  *
  * POST add a commento to a Post
@@ -157,6 +168,9 @@ deleteVote (id:number): Observable<void>{
  * @link /interfaces/responses.ts
  *
  */
+addComment (postId: number, comment: CommentInsert): Observable<CommentResponse> {
+  return this.#http.post<CommentResponse>(`${this.postUrl}/${postId}/comments`, comment);
+}
 // async addComment(postId: number, comment: CommentInsert): Promise<CommentResponse> {
 //     return this.#http.post(`${SERVER}/posts/${postId}/comments`, comment);
 // }

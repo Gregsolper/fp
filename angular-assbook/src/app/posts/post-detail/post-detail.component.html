@@ -6,3 +6,55 @@
     Go Back
   </button>
 </div>
+
+<ul class="list-group mt-4 mb-4" id="comments">
+  <li class="list-group-item active">Comments</li>
+  <!-- <li class="list-group-item d-flex flex-row">
+    <img class="rounded-circle align-self-start me-3" src="img/avatar.png" alt="">
+    <div>
+      <div><strong>User's name: </strong>Comment text....</div>
+      <div><small class="text-muted">10/20/2018 5:26 PM</small></div>
+    </div>
+  </li> -->
+</ul>
+
+<form class="mt-4" id="commentForm"
+[formGroup]="commentForm"
+(ngSubmit) ="addComment ()"
+novalidate
+>
+  <div class="mb-3">
+    <textarea class="form-control" name="comment" id="comment"
+    placeholder="Write a comment"
+    formControlName="comment"
+    [ngClass]="
+    validClasses(commentForm.controls.comment, 'is-valid', 'is-invalid')
+  "
+    ></textarea>
+    @if (commentForm.controls.comment.errors?.['minlength']) {
+      <div class="invalid-feedback">
+        You must enter at least
+        {{
+    commentForm.controls.comment.errors?.['minlength'].requiredLength
+    - commentForm.controls.comment.errors?.['minlength'].actualLength
+        }}
+        characters more.
+      </div>
+      }
+    @if (commentForm.controls.comment.errors?.['required']) {
+      <div class="invalid-feedback">
+        Write a comment!
+      </div>
+    }
+  </div>
+  @if(commentForm.valid){
+      <button type="submit" class="btn btn-primary mt-3">Send</button>
+  }
+</form>
+@if (listComments && listComments.length>0 ){
+@for ( item of listComments ; track item.id){
+  <comment-card [item] = item ></comment-card>
+}
+} @else {
+  <p id="headList">Be the firs to comment!</p>
+}

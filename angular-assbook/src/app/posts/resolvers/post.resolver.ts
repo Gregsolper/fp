@@ -1,9 +1,13 @@
 import { ResolveFn, Router } from '@angular/router';
-import { PostsService } from '../service/posts.service';
+import { PostsService } from '../../services/posts.service';
 import { EMPTY, catchError } from 'rxjs';
 import { inject } from '@angular/core';
-import { Post } from '../interfaces/post';
-
+import { Post } from '../../interfaces/post';
+/**
+ * This function does get befor charge the component
+ * @param route
+ * @returns
+ */
 export const postResolver: ResolveFn<Post> = (route) => {
 
   return inject(PostsService).getPost (+route.params['id']).pipe(

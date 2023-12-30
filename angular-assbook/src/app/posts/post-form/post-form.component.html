@@ -7,7 +7,7 @@
   novalidate
 
 >
-  <div class="mb-3">
+  <div class="m  b-3">
     <label for="title">{{ labelForm.title }}</label>
     <input
       type="text"
@@ -22,7 +22,7 @@
     />
     @if (postForm.controls.title.errors?.['minlength']) {
     <div class="invalid-feedback">
-      You mus enter at least
+      You must enter at least
       {{
   postForm.controls.title.errors?.['minlength'].requiredLength
   - postForm.controls.title.errors?.['minlength'].actualLength
@@ -73,7 +73,7 @@
     <!--[(ngModel)]="imageName" -->
   </div>
   @if ( imageName != "") {
-  <img [src]="imageName" alt="" id="imgPreview" class="img-thumbnail" />
+      <img [src]="imageName" alt="" id="imgPreview" class="img-thumbnail" />
   }
   <div class="mb-3">
     <label for="mood">{{ labelForm.mood }}</label>
@@ -91,7 +91,11 @@
         class="btn btn-primary btn-lg"
         [disabled]="postForm.invalid || postForm.untouched"
       >
+      @if(editMode ){
+        Update
+      } @else {
         {{ labelForm.create }}
+      }
       </button>
     </div>
     <div class="alert alert-danger col hidden" id="errorMsg">

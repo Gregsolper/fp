@@ -1,5 +1,6 @@
-//import { User } from "./user";
-/*
+import { User } from "./user";
+
+
 export interface PostInsert {
     title?: string;
     description?: string;
@@ -18,20 +19,20 @@ export interface Post extends PostInsert {
     likes: boolean | null;
     mine: boolean;
 }
-*/
 
-export interface Post {
-      id: number;
-      title: string;
-      description: string;
-      date : string;
-      image :string;
-      place: string | null;
-      lat : number | null;
-      lng : number | null;
-      mood : number;
-      likes : boolean | null;
-  }
+
+// export interface Post {
+//       id: number;
+//       title: string;
+//       description: string;
+//       date : string;
+//       image :string;
+//       place: string | null;
+//       lat : number | null;
+//       lng : number | null;
+//       mood : number;
+//       likes : boolean | null;
+//   }
 
   export interface Like {
     likes: boolean | null;

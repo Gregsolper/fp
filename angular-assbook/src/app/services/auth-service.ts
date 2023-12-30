@@ -1,6 +1,6 @@
-import { SERVER } from "../../constants";
+import { SERVER } from "../constants";
 import { TokenResponse, UserResponse } from "../interfaces/responses";
-import { UserLogin, User } from "./../interfaces/user";
+import { UserLogin, User } from "../interfaces/user";
 import { HttpService } from "./http.service";
 // Student: Gregorio Solís Pérez
 // 11893345

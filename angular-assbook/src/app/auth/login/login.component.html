@@ -1,17 +1,108 @@
 <div class="container">
-  <form (ngSubmit)="login()" id="form-login" class="mt-4" method="POST" role="form">
-    <legend>Welcome to FoodScore!</legend>
+  <h3>Wellcome to FoodScorre!</h3>
+  <div class="row">
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="login()"
+      id="form-login"
+      class="mt-4"
+      method="POST"
+      role="form"
+    >
+      <legend>Use your EMAIL</legend>
 
-    <div class="mb-3">
-      <label for="email">Email:</label>
-      <input type="email" class="form-control" name="email" id="email" placeholder="Email" required />
+      <div class="mb-3">
+        <label for="email">Email:</label>
+        <input
+          type="email"
+          class="form-control"
+          name="email"
+          id="email"
+          placeholder="Email"
+          formControlName="email"
+          [ngClass]="
+            validClasses(loginForm.controls.email, 'is-valid', 'is-invalid')
+          "
+        />
+        @if (loginForm.controls.email.errors?.['required']) {
+        <div class="invalid-feedback">Give an email is mandatory</div>
+        } @if (loginForm.controls.email.errors?.['email']) {
+        <div class="invalid-feedback">Email has an invalid format</div>
+        }
+      </div>
+      <div class="mb-3">
+        <label for="password">Password:</label>
+        <input
+          type="password"
+          class="form-control"
+          name="password"
+          id="password"
+          placeholder="Password"
+          formControlName="password"
+          [ngClass]="
+            validClasses(loginForm.controls.password, 'is-valid', 'is-invalid')
+          "
+        />
+        @if (loginForm.controls.password.errors?.['required']) {
+        <div class="invalid-feedback">Have a password is mandatory</div>
+        }
+      </div>
+      <p class="text-danger" id="errorInfo"></p>
+      <button class="btn btn-secondary" (click)="goRegister()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16">
+          <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664z"/>
+          <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"/>
+        </svg>
+        Create account
+      </button>
+      <button type="submit" class="btn btn-primary">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-envelope"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"
+          />
+        </svg>
+        Login
+      </button>
+    </form>
+  </div>
+  <div class="row">
+    <legend>Or login whith social accounts</legend>
+  </div>
+  <div class="row container">
+    <div class="col">
+      <div googleLogin class="btn"></div>
     </div>
-    <div class="mb-3">
-      <label for="password">Password:</label>
-      <input type="password" class="form-control" name="password" id="password" placeholder="Password" required />
+    <div class="col">
+      <button
+        fbLogin
+        [scopes]="['email', 'public_profile']"
+        class="btn btn-primary"
+        (loginOk)="loggedFacebook($event)"
+        (loginError)="showError($event)"
+      >
+        <!-- <fa-icon [icon]="iconFacebook"></fa-icon>  -->
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-facebook"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"
+          />
+        </svg>
+        Login con Facebook
+      </button>
     </div>
-    <p class="text-danger" id="errorInfo"></p>
-    <a class="btn btn-secondary" href="/register.html" role="button">Create account</a>
-    <button type="submit" class="btn btn-primary">Login</button>
-  </form>
+  </div>
 </div>
