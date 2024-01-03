@@ -18,8 +18,8 @@ export const appConfig: ApplicationConfig = {
                   ),
     provideHttpClient(withInterceptors([baseUrlInterceptor, authInterceptor])),
     provideFacebookId('APP_ID', 'v15.0'),
-    provideBingmapsKey(BINGMAP_API_KEY), // Este esta definido en constantes pero tambien en bingmaps.config.ts
-    provideGoogleId(GOOGLE_PROYECT_ID),
+    provideBingmapsKey('AmCsCCqcPEgBpcQEt-j_fZpvSQ_GhKqyvzOk1UiIb3vd1l1Usz51mj-K1uB9hvxl'),  // BINGMAPS_KEY
+    provideGoogleId('1002957697747-v0fevraaubhn6dl6g2a474l92k2b0cg3.apps.googleusercontent.com' )// GOOGLE_PROYECT_ID
 
   ]
 };

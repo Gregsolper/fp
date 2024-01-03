@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="row mt-4" id="profile">
+
+    <div class="col-3">
+      <div>
+        <img class="w-100" id="avatar" src="{{imageName}}" alt="User Avatar" />
+        @if (profile.me){
+        <label class="btn btn-sm btn-danger">
+          <i class="fa-regular fa-image"></i>
+          <input type="file" id="avatarInput" class="d-none" (change)="changeImage($event)" />
+        </label>
+      }
+      </div>
+    </div>
+
+    <div class="col-9" id="profileInfo">
+      <h4 id="name">{{profile.name}}</h4>
+      <h4 id="email">
+        <small class="text-muted">{{profile.email}}</small>
+      </h4>
+      <div>
+        @if(profile.me){
+        <button class="btn btn-primary" id="editProfile" (click)="editProfile()"   >
+          <i class="fa-regular fa-pen-to-square"></i>
+          Edit profile
+        </button>
+        <button class="btn btn-success" id="editPassword"  (click)="editPassword()" >
+          <i class="fa-solid fa-lock"></i>
+          Edit passwords
+        </button>
+      }
+        <button class="btn btn-secondary" id="goPosts" >
+          <a [routerLink]="['/posts']" [queryParams]="{creator: profile.id}">
+          <i class="fa-solid fa-camera-retro"></i>
+          Posts
+          </a>
+        </button>
+      </div>
+    </div>
+
+    <bm-map [coords]="coordinates">
+      <bm-marker [coords]="coordinates" color="green"></bm-marker>
+    </bm-map>

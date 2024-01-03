@@ -1,0 +1,80 @@
+<div class="modal-header">
+  <h4 class="modal-title">Edit profile</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss()"
+  ></button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="editProForm"
+    (ngSubmit)="modifyProfile()"
+    id="edit-pro-form"
+    class="mt-4"
+    novalidate
+    >
+    <div class="mb-3">
+      <div class="mb-3">
+        <label for="email">Email:</label>
+        <input
+          type="email"
+          class="form-control"
+          name="email"
+          id="email"
+          placeholder="Email"
+          formControlName="email"
+          [ngClass]="
+          validClasses(editProForm.controls.name, 'is-valid', 'is-invalid')
+        "
+        />
+        @if (editProForm.controls.email.errors?.['required']){
+          <div class="invalid-feedback">Give an email is mandatory</div>
+        }
+        @if (editProForm.controls.email.errors?.['email']) {
+          <div class="invalid-feedback">Email has an invalid format</div>
+        }
+
+      </div>
+      <div class="mb-3">
+        <label for="name">Name:</label>
+        <input
+          type="text"
+          class="form-control"
+          name="name"
+          id="name"
+          placeholder="Name"
+          class="form-control"
+          formControlName="name"
+          [ngClass]="
+          validClasses(editProForm.controls.name, 'is-valid', 'is-invalid')
+        "
+        />
+        @if (editProForm.controls.name.errors?.['minlength']){
+          <div class="invalid-feedback">
+            You must enter at least
+            {{
+                editProForm.controls.name.errors?.['minlength'].requiredLength
+              - editProForm.controls.name.errors?.['minlength'].actualLength
+            }}
+            characters more.
+          </div>
+          }
+          @if (editProForm.controls.name.errors?.['required']) {
+              <div class="invalid-feedback">Give a name is mandatory</div>
+          }
+
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save changes</button>
+  </form>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-danger"
+    (click)="exitEdit()"
+  >
+    Cancel
+  </button>
+</div>

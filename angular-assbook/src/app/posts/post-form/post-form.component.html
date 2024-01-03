@@ -60,6 +60,7 @@
     </div>
     }
   </div>
+  <!--
   <div class="mb-3">
     <label for="image"> {{ labelForm.photo }} </label>
     <input
@@ -70,11 +71,81 @@
       (change)="changeImage($event)"
       formControlName="image"
     />
-    <!--[(ngModel)]="imageName" -->
+    <!--[(ngModel)]="imageName"
   </div>
   @if ( imageName != "") {
       <img [src]="imageName" alt="" id="imgPreview" class="img-thumbnail" />
   }
+-->
+
+<!-- Select photo or location -->
+  <div class="mb-3">
+    <input
+      type="radio"
+      name="type"
+      id="postPhoto"
+      value="photo"
+      checked
+      (click)="selectPhoto()"
+    />
+    <label for="postPhoto">Post Photo</label>
+    <input
+      type="radio"
+      name="type"
+      id="postLocation"
+      value="location"
+      class="ms-3"
+      (click)="selectLocation()"
+    />
+    <label for="postLocation">Post location</label>
+  </div>
+  @if (presentation=== 1){
+  <div id="photo-group">
+    <div class="mb-3">
+      <label for="image">{{ labelForm.photo }}</label>
+      <input type="file"
+      class="form-control"
+      id="image"
+      name="image"
+      (change)="changeImage($event)"
+      formControlName="image"
+       />
+    </div>
+    @if ( imageName != "") {
+      <img [src]="imageName" alt="" id="imgPreview" class="img-thumbnail" />
+    }
+  </div>
+ }
+  @if (presentation===2){
+  <div id="location-group" class="mb-3">
+    <div id="location-container" class="mb-3">
+      <label for="place">Address</label>
+      <input
+        type="text"
+        class="form-control"
+        name="place"
+        id="place"
+        placeholder="Address"
+        formControlName="place"
+      />
+    </div>
+    <div id="map">
+      <bm-map [coords]="coordinates">
+        <bm-marker [coords]="coordinates" color="green"></bm-marker>
+        <bm-autosuggest idContainer="location-container" idInput="place" (locationChanged)="moveMap($event)"></bm-autosuggest>
+
+      </bm-map>
+
+    </div>
+  </div>
+}
+
+
+
+
+
+
+
   <div class="mb-3">
     <label for="mood">{{ labelForm.mood }}</label>
     <select class="form-select" name="mood" id="mood" formControlName="mood">

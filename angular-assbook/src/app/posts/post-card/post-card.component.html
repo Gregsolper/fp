@@ -27,7 +27,9 @@
             <img src="{{item.creator.avatar}}" class="rounded-circle" alt=""/>
           </div>
           <div class="col">
+            <a [routerLink] = "['/profile',item.creator.id]"  >
             <div class="name">{{item.creator.name}}</div>
+            </a>
             <div>
               <small class="text-muted">{{ item.date  | datePipe }} </small>
             </div>

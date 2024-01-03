@@ -59,13 +59,13 @@ export class PostsPageComponent implements OnInit{
 
   ngOnInit(): void {
 
-    this.#authServie.isLogged().subscribe({
-      error: (error)=> {
-        console.log('**Error Posts-Page/get-Posts Not logged')
-        console.error (error);
-        this.#router.navigate(['/auth/login']);
-      }
-    });
+    // this.#authServie.isLogged().subscribe({
+    //   error: (error)=> {
+    //     console.log('**Error Posts-Page/get-Posts Not logged')
+    //     console.error (error);
+    //     this.#router.navigate(['/auth/login']);
+    //   }
+    // });
 
     this.#titleService.setTitle("Posts|All");
     this.#postService.getPosts()

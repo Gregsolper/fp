@@ -21,11 +21,22 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TrueFalseModalComponent } from '../../modals/true-false-modal/true-false-modal.component';
 import { UserService } from '../../services/user.service';
 import { User } from '../../interfaces/user';
+import { Show } from '../../interfaces/show';
+import { BmAutosuggestDirective } from '../../bingmaps/bm-autosuggest.directive';
+import { BmMapDirective } from '../../bingmaps/bm-map.directive';
+import { BmMarkerDirective } from '../../bingmaps/bm-marker.directive';
+import { Coordinates } from '../../bingmaps/coordinates';
 
 @Component({
   selector: 'post-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    BmMapDirective,
+    BmMarkerDirective,
+    BmAutosuggestDirective,
+  ],
   templateUrl: './post-form.component.html',
   styleUrl: './post-form.component.css',
 })
@@ -42,6 +53,8 @@ export class PostFormComponent implements OnInit, CanComponentDeactivate {
   me!: User;
   imageName = '';
   editMode = false;
+  presentation: Show = Show.image;
+  newPost!: Post;
 
   labelForm = {
     headerTitle: 'AssBook',
@@ -63,8 +76,14 @@ export class PostFormComponent implements OnInit, CanComponentDeactivate {
     ],
     description: ['', [Validators.minLength(8)]],
     image: '',
+    place: '',
     mood: [0, [Validators.required, Validators.min(0), Validators.max(2)]],
   });
+
+  coordinates: Coordinates = {
+    latitude: 38.3245,
+    longitude: -0.5,
+  };
 
   ngOnInit(): void {
     if (this.post) {
@@ -113,22 +132,39 @@ export class PostFormComponent implements OnInit, CanComponentDeactivate {
             this.me = resp.user;
           },
         });
-        const newPost: Post = {
-          ...this.postForm.getRawValue(),
-          image: this.imageName,
-          id: 0,
-          date: this.dateToString(new Date()),
-          place: undefined,
-          lat: undefined,
-          lng: undefined,
-          likes: null,
-          totalLikes: 0,
-          creator: this.me,
-          mine: false,
-        };
-        newPost.mood = +newPost.mood;
 
-        this.#postService.addPost(newPost).subscribe({
+        if (this.presentation === Show.image) {
+          this.newPost = {
+            ...this.postForm.getRawValue(),
+            image: this.imageName,
+            id: 0,
+            date: this.dateToString(new Date()),
+            place: undefined,
+            lat: undefined,
+            lng: undefined,
+            likes: null,
+            totalLikes: 0,
+            creator: this.me,
+            mine: false,
+          };
+        } else {
+          this.newPost = {
+            ...this.postForm.getRawValue(),
+            image: '',
+            id: 0,
+            date: this.dateToString(new Date()),
+            place: this.postForm.controls.place.value,
+            lat: this.coordinates.latitude,
+            lng: this.coordinates.longitude,
+            likes: null,
+            totalLikes: 0,
+            creator: this.me,
+            mine: false,
+          };
+        }
+        this.newPost.mood = +this.newPost.mood;
+
+        this.#postService.addPost(this.newPost).subscribe({
           next: (post) => {
             console.log('added:');
             console.log(post);
@@ -146,32 +182,32 @@ export class PostFormComponent implements OnInit, CanComponentDeactivate {
     }
   }
 
-  updatePost () {
+  updatePost() {
     if (this.postForm.pristine) {
       this.#router.navigate(['/posts']);
     }
     if (this.postForm.valid) {
-      if (this.postForm.controls.title.dirty){
+      if (this.postForm.controls.title.dirty) {
         this.post.title = this.postForm.get('title')?.value;
       }
-      if (this.postForm.controls.description.dirty){
+      if (this.postForm.controls.description.dirty) {
         this.post.description = this.postForm.get('description')?.value;
       }
 
-      if (this.postForm.controls.mood.dirty){
+      if (this.postForm.controls.mood.dirty) {
         let newMood = this.postForm.get('mood')?.value || 0;
         newMood = +newMood;
         this.post.mood = newMood;
       }
-      if (this.postForm.controls.image.dirty){
+      if (this.postForm.controls.image.dirty) {
         this.post.image = this.imageName;
       }
-      console.log("triying");
+      console.log('triying');
       console.log(this.post);
       this.#postService.updatePost(this.post).subscribe({
         next: (post) => {
           console.log('updated:');
-          console.log (post);
+          console.log(post);
           this.saved = true;
         },
         error: (error) => {
@@ -216,5 +252,15 @@ export class PostFormComponent implements OnInit, CanComponentDeactivate {
     )
       return true;
     else return false;
+  }
+
+  selectPhoto() {
+    this.presentation = Show.image;
+  }
+  selectLocation() {
+    this.presentation = Show.location;
+  }
+  moveMap(coords: Coordinates) {
+    this.coordinates = coords;
   }
 }

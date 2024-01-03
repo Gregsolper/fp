@@ -6,3 +6,9 @@
   opacity: 1;
   transition: opacity .5s linear;
 }
+
+bm-map {
+  display: block;
+  height: 300px;
+  width: 300px;
+}

@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { User } from '../interfaces/user';
-import { UserResponse } from '../interfaces/responses';
+import { User, UserAvatarEdit, UserPasswordEdit, UserProfileEdit } from '../interfaces/user';
+import { AvatarResponse, UserResponse } from '../interfaces/responses';
+import { SERVER } from '../constants';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,9 @@ export class UserService {
    async getProfile (id:number) : Promise<UserResponse>{
     return this.#http.get<UserResponse>(`${SERVER}/users/${id}`);
 }*/
+getProfile (id:number) : Observable<UserResponse>{
+  return this.#http.get<UserResponse>(`users/${id}`);
+}
 
 /**
  *
@@ -49,7 +53,7 @@ getMyProfile ():Observable<UserResponse>{
 
 /**
  *
- * PUT save a new profile
+ * PUT update a new profile
  *
  * @param userDataChange : UserProfileEdit
  * @returns void
@@ -62,6 +66,11 @@ getMyProfile ():Observable<UserResponse>{
 async saveProfile(userDataChange:UserProfileEdit): Promise<void> {
     return this.#http.put<void,UserProfileEdit> (`${SERVER}/users/me`,userDataChange);
 }*/
+saveProfile(userDataChange:UserProfileEdit): Observable<void> {
+  return this.#http.put<void> (`users/me`,userDataChange);
+}
+
+
 
 /**
  *
@@ -102,6 +111,11 @@ async registerUser(userForm: User): Promise<User> {
 async saveAvatar (avatar:UserAvatarEdit): Promise<AvatarResponse>{
     return this.#http.put<AvatarResponse,UserAvatarEdit>(`${SERVER}/users/me/avatar`,avatar);
 }*/
+saveAvatar (avatar:UserAvatarEdit): Observable<string>{
+  return this.#http.put<AvatarResponse>(`users/me/avatar`,avatar)
+  .pipe ((map((resp)=>resp.avatar)));
+
+}
 
 /**
  *
@@ -116,5 +130,10 @@ async savePassword(password: string): Promise<void> {
     };
     return this.#http.put<void,UserPasswordEdit>(`${SERVER}/users/me/password`,passform);
 } */
-
+savePassword(password: string): Observable<void> {
+  const passform : UserPasswordEdit= {
+      password: password
+  };
+  return this.#http.put<void>(`users/me/password`,passform);
+}
 }
