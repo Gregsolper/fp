@@ -31,6 +31,12 @@ export class PostsService {
       .get<PostsResponse>(this.postUrl)
       .pipe(map((resp=>resp.posts)));
    }
+
+   getPostsCreator (id:number) : Observable<Post[]> {
+    return this.#http
+      .get<PostsResponse>(`${this.postUrl}/user/${id}`)
+      .pipe(map((resp=>resp.posts)));
+   }
 /*
    async getAll(): Promise<PostsResponse> {
     return this.#http.get<PostsResponse>(`${SERVER}/posts`);
