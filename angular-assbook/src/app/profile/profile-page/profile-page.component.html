@@ -1,38 +1,65 @@
 <div class="container">
   <div class="row mt-4" id="profile">
-
     <div class="col-3">
       <div>
-        <img class="w-100" id="avatar" src="{{imageName}}" alt="User Avatar" />
+        <img
+          class="w-100"
+          id="avatar"
+          src="{{ imageName }}"
+          alt="User Avatar"
+        />
         @if (profile.me){
         <label class="btn btn-sm btn-danger">
           <i class="fa-regular fa-image"></i>
-          <input type="file" id="avatarInput" class="d-none" (change)="changeImage($event)" />
+          <input
+            type="file"
+            id="avatarInput"
+            class="d-none"
+            (change)="changeImage($event)"
+          />
         </label>
-      }
+        }
       </div>
     </div>
 
     <div class="col-9" id="profileInfo">
-      <h4 id="name">{{profile.name}}</h4>
+      <h4 id="name">{{ profile.name }}</h4>
       <h4 id="email">
-        <small class="text-muted">{{profile.email}}</small>
+        <small class="text-muted">{{ profile.email }}</small>
       </h4>
       <div>
         @if(profile.me){
-        <button class="btn btn-primary" id="editProfile" (click)="editProfile()"   >
+        <button
+          class="btn btn-primary"
+          id="editProfile"
+          (click)="editProfile()"
+        >
           <i class="fa-regular fa-pen-to-square"></i>
           Edit profile
         </button>
-        <button class="btn btn-success" id="editPassword"  (click)="editPassword()" >
+        <button
+          class="btn btn-success"
+          id="editPassword"
+          (click)="editPassword()"
+        >
           <i class="fa-solid fa-lock"></i>
           Edit passwords
         </button>
-      }
-        <button class="btn btn-secondary" id="goPosts" >
-          <a [routerLink]="['/posts']" [queryParams]="{creator: profile.id}">
-          <i class="fa-solid fa-camera-retro"></i>
-          Posts
+        } @else { @if (following===true){
+        <button class="btn btn-danger" id="follow" (click)="wantStopFollow()">
+          <i class="fa-solid fa-lock"></i>
+          Stop following
+        </button>
+        } @else {
+        <button class="btn btn-primary" id="follow" (click)="wantFollow()">
+          <i class="fa-solid fa-lock"></i>
+          Follow
+        </button>
+        } }
+        <button class="btn btn-secondary" id="goPosts">
+          <a [routerLink]="['/posts']" [queryParams]="{ creator: profile.id }">
+            <i class="fa-solid fa-camera-retro"></i>
+            Posts
           </a>
         </button>
       </div>
@@ -41,3 +68,104 @@
     <bm-map [coords]="coordinates">
       <bm-marker [coords]="coordinates" color="green"></bm-marker>
     </bm-map>
+    <div class="accordion" id="accordionPanelsStayOpenExample">
+      @if (profile.me){
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#panelsStayOpen-collapseOne"
+            aria-expanded="true"
+            aria-controls="panelsStayOpen-collapseOne"
+          >
+          <i class="fa-solid fa-person-walking-arrow-right"></i>
+            Who I follow:
+          </button>
+        </h2>
+        <div
+          id="panelsStayOpen-collapseOne"
+          class="accordion-collapse collapse show"
+        >
+          <div class="accordion-body">
+            @if (usersFollowing.length>0){
+              @for (item of usersFollowing ; track item.id){
+                   <profile-detail  [user] = item />
+              }
+            } @else {
+                   <p>No following to anybody</p>
+            }
+
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#panelsStayOpen-collapseTwo"
+            aria-expanded="false"
+            aria-controls="panelsStayOpen-collapseTwo"
+          >
+          <i class="fa-solid fa-person-walking-arrow-loop-left"></i>
+            Who are following me:
+          </button>
+        </h2>
+        <div
+          id="panelsStayOpen-collapseTwo"
+          class="accordion-collapse collapse"
+        >
+          <div class="accordion-body">
+            @if (usersFollowers.length>0){
+              @for (item of usersFollowers ; track item.id){
+                <profile-detail  [user] = item />
+              }
+            } @else {
+            <p>No body following you</p>
+            }
+          </div>
+        </div>
+      </div>
+    }
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#panelsStayOpen-collapseThree"
+            aria-expanded="false"
+            aria-controls="panelsStayOpen-collapseThree"
+          >
+          <i class="fa-solid fa-camera-retro"></i>
+            {{profile.name}}'s Posts
+          </button>
+        </h2>
+        <div
+          id="panelsStayOpen-collapseThree"
+          class="accordion-collapse collapse"
+        >
+          <div class="accordion-body">
+            @if (profilePosts.length>0){
+              <nav id="navSearch" class="navbar navbar-light bg-light justify-content-between mt-3">
+                <form class="container-fluid">
+                    <input [(ngModel)]="search"   class="form-control" type="text" name="search" id="search"
+                      placeholder="Search" aria-label="Search">
+                </form>
+              </nav>
+            @for ( item of profilePosts | postFilter : search   ; track item.id) {
+              <post-card [item] = item (deletedPost)="deletePost(item.id)" />
+            }
+          } @else {
+            <h3>Add a post!</h3>
+          }
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

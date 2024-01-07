@@ -2,7 +2,6 @@ import { InfoModalComponent } from './../../modals/info-modal/info-modal.compone
 import {
   Component,
   Input,
-  OnInit,
   computed,
   inject,
   numberAttribute,
@@ -20,6 +19,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TrueFalseModalComponent } from '../../modals/true-false-modal/true-false-modal.component';
+import { User } from '../../interfaces/user';
 
 @Component({
   selector: 'posts-page',
@@ -35,7 +35,7 @@ import { TrueFalseModalComponent } from '../../modals/true-false-modal/true-fals
     PostFilterPipe,
   ],
 })
-export class PostsPageComponent implements OnInit {
+export class PostsPageComponent {
   #postService = inject(PostsService);
   #titleService = inject(Title);
   #router = inject(Router);
@@ -59,14 +59,21 @@ export class PostsPageComponent implements OnInit {
 
   search?: string;
   posts: Post[] = [];
-
+  showAllPost = true;
   numId = 1;
+  userPost!: User;
 
   @Input({ transform: numberAttribute }) set creator(creator: number) {
     if (creator) {
       this.#titleService.setTitle('Posts|Creator');
       this.#postService.getPostsCreator(creator).subscribe({
-        next: (posts) => (this.posts = posts),
+        next: (posts) => {
+          this.posts = posts;
+          this.showAllPost = false;
+          if (this.posts.length > 0) {
+            this.userPost = this.posts[0].creator;
+          }
+        },
         error: (error) => {
           console.log('**Error Posts-Page/get-Posts creator');
           console.error(error);
@@ -76,7 +83,10 @@ export class PostsPageComponent implements OnInit {
     } else {
       this.#titleService.setTitle('Posts|All');
       this.#postService.getPosts().subscribe({
-        next: (posts) => (this.posts = posts),
+        next: (posts) => {
+          this.posts = posts;
+          this.showAllPost = true;
+        },
         error: (error) => {
           console.log('**Error Posts-Page/get-Posts');
           console.error(error);
@@ -85,7 +95,6 @@ export class PostsPageComponent implements OnInit {
       });
     }
   }
-  ngOnInit(): void {}
 
   /**
    * Event tiggerred by postForm

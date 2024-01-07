@@ -1,68 +1,78 @@
 <div
-      [ngClass]="{
-        'border-success': (+item.mood === 1),
-        'border-danger': (+item.mood === 2),
-        'mb-4' : true,
-        'card':true,
-        'shadow': true
-      }"
-    >
-<div>
-  <a [routerLink] = "['/posts',item.id]"  >
-      <img class="card-img-top" [src]="item.image" alt=""/>
-      </a>
-</div>
-      @if (item.title != "" || item.description !="") {
-      <div class="card-body">
-        <a [routerLink] = "['/posts',item.id]"  >
-        <h5 class="card-title">
-          {{ item.title }}</h5>
-        <p class="card-text" [innerText]=item.description ></p>
-        </a>
+  [ngClass]="{
+    'border-success': +item.mood === 1,
+    'border-danger': +item.mood === 2,
+    'mb-4': true,
+    card: true,
+    shadow: true
+  }"
+>
+  <div>
+    <a [routerLink]="['/posts', item.id]">
+      <img class="card-img-top" [src]="item.image" alt="" />
+    </a>
+  </div>
+  @if (item.title != "" || item.description !="") {
+  <div class="card-body">
+    <a [routerLink]="['/posts', item.id]">
+      <h5 class="card-title">
+        {{ item.title }}
+      </h5>
+      <p class="card-text" [innerText]="item.description"></p>
+    </a>
+  </div>
+  }
+  <div class="card-footer bg-transparent">
+    <div class="row">
+      <div class="col-auto avatar ps-1 pe-1">
+        <img src="{{ item.creator.avatar }}" class="rounded-circle" alt="" />
       </div>
-    }
-      <div class="card-footer bg-transparent">
-        <div class="row">
-          <div class="col-auto avatar ps-1 pe-1">
-            <img src="{{item.creator.avatar}}" class="rounded-circle" alt=""/>
-          </div>
-          <div class="col">
-            <a [routerLink] = "['/profile',item.creator.id]"  >
-            <div class="name">{{item.creator.name}}</div>
-            </a>
-            <div>
-              <small class="text-muted">{{ item.date  | datePipe }} </small>
-            </div>
-          </div>
-          @if (item.mine) {
-            <div class="col-auto">
-              <button (click)="informEdit()"  class="btn btn-primary mr-3 h-100 ">Edit</button>
-            </div>
-          <div class="col-auto">
-            <button (click)="informDelete()"  class="btn btn-danger mr-3 h-100 delete">Delete</button>
-          </div>
-        }
-          <div class="col-auto pt-2">
-            <i (click)="likeIt(item)"
-              [ngClass]="{
-                'fa-regular' : true,
-                'fa-thumbs-up' : true,
-                'me-3' : true,
-                'text-primary' : item.likes === true
-              }"
-            ></i>
-            <i (click)="disLikeIt(item)"
-              [ngClass]="{
-                'fa-regular' : true,
-                'fa-thumbs-down' : true,
-                'me-3' : true,
-                'text-danger' : item.likes === false
-              }"
-            ></i>
-            <div class="mt-1">
-              <small class="text-muted likes">{{totalLikes}} likes</small>
-            </div>
-          </div>
+      <div class="col">
+        <a [routerLink]="['/profile', item.creator.id]">
+          <div class="name">{{ item.creator.name }}</div>
+        </a>
+        <div>
+          <small class="text-muted">{{ item.date | datePipe }} </small>
+        </div>
+      </div>
+      @if (item.mine) {
+      <div class="col-auto">
+        <button (click)="informEdit()" class="btn btn-primary mr-3 h-100">
+          Edit
+        </button>
+      </div>
+      <div class="col-auto">
+        <button
+          (click)="informDelete()"
+          class="btn btn-danger mr-3 h-100 delete"
+        >
+          Delete
+        </button>
+      </div>
+      }
+      <div class="col-auto pt-2">
+        <i
+          (click)="likeIt(item)"
+          [ngClass]="{
+            'fa-regular': true,
+            'fa-thumbs-up': true,
+            'me-3': true,
+            'text-primary': item.likes === true
+          }"
+        ></i>
+        <i
+          (click)="disLikeIt(item)"
+          [ngClass]="{
+            'fa-regular': true,
+            'fa-thumbs-down': true,
+            'me-3': true,
+            'text-danger': item.likes === false
+          }"
+        ></i>
+        <div class="mt-1">
+          <small class="text-muted likes">{{ totalLikes }} likes</small>
         </div>
       </div>
     </div>
+  </div>
+</div>

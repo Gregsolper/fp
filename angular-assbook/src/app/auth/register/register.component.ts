@@ -70,7 +70,7 @@ export class RegisterComponent implements OnInit, CanComponentDeactivate {
     return  modalRef.result.catch(()=>false);
   }
 
-  callInfoModal (title:string, body:string){
+ async callInfoModal (title:string, body:string){
     const modalRef = this.#modalService.open(InfoModalComponent);
     modalRef.componentInstance.title = title;
     modalRef.componentInstance.body = body;
@@ -112,9 +112,10 @@ export class RegisterComponent implements OnInit, CanComponentDeactivate {
 
       this.#userService.registerUser(newUser).subscribe({
         next: async (user) => {
+          this.saved = true;
           console.log('added:' + user);
           await this.callInfoModal("User added","login please");
-          this.saved = true;
+          this.#router.navigate(['/posts']);
         },
         error: (error) => {
           console.error('No added **' + error.message);

@@ -1,10 +1,10 @@
 
 
 <div class="container">
-  <!--
-<post-form  (publishedPost)="addToPosts($event)" />
- <p id="headList">POST LIST:</p>
-  -->
+
+  @if (!showAllPost && userPost){
+    <h2>Post created by {{userPost.name}}</h2>
+  }
   <div id="postContainer">
     @if (posts.length>0) {
 
@@ -21,7 +21,7 @@
       <post-card [item] = item (deletedPost)="deletePost(item.id)" />
     }
   } @else {
-    <p id="headList">Be the firs to add a post!</p>
+    <p id="headList">No post to show</p>
   }
   </div>
 </div>

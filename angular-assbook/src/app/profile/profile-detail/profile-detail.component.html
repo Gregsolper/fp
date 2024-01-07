@@ -1,0 +1,16 @@
+<div class="mb-4 card shadow">
+  <div class="row">
+    <div class="col-auto avatar ps-1 pe-1 img-fluid photo">
+      <img src="{{user.avatar}}" style="width: 40px;"  class="rounded-circle photo" alt="" />
+    </div>
+    <div class="col">
+      <a [routerLink]="['/profile', user.id]">
+        <div class="name">{{ user.name }}</div>
+      </a>
+    </div>
+    <div class="col">
+      <span><strong>Contact:   </strong></span>
+      <a href="mailto:{{user.email}}">{{user.email}}</a>
+    </div>
+  </div>
+</div>

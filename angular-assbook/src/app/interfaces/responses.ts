@@ -37,3 +37,15 @@ export interface CommentsResponse {
 export interface CommentResponse {
     comment: CommentPost;
 }
+
+export interface CheckFollowResponse {
+    following: boolean;
+}
+
+export interface FollowedResponse {
+  followed: User[];
+}
+
+export interface FollowersResponse {
+  followers: User[];
+}
