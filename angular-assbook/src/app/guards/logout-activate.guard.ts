@@ -1,7 +1,15 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
-
+/**
+ * Review if is logout
+ * if true send to auth/login
+ * otherwise follow route
+ *
+ * @param route not used
+ * @param state not used
+ * @returns true of rout /auth/login
+ */
 export const logoutActivateGuard: CanActivateFn = (route, state) => {
   let activated!: boolean;
   inject(AuthService)

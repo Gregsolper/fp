@@ -1,24 +1,20 @@
+import { routes } from './../app.routes';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { inject } from '@angular/core';
 
+/**
+ * Before the component is activated review if is logged with the AuthService.logged() function
+ *
+ * @see auth.routes.ts
+ * @see profile.routes.ts
+ * @see posts.routes.ts
+ *
+ * @param route not used
+ * @param state not used
+ * @returns route
+ */
 export const loginActivateGuard: CanActivateFn = (route, state) => {
-  /*
-  inject(AuthService).isLogged().pipe (
-    map((r)=>{
-      console.log(r);
-      if (r === true){
-        console.log("authservice autoriza----->>>>");
-        return true} else {
-          console.log("NO autoriza----->>>>");
-      return inject(Router).navigate(['/auth/login']);
-    }}),
-    catchError(()=>{ inject(Router).navigate(['/auth/login']); return EMPTY;} )
-  );
-  return true;
-
-  */
-
   let activated!: boolean;
   inject(AuthService)
     .isLogged()
