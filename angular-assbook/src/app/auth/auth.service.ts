@@ -1,6 +1,6 @@
 import { TokenResponse } from '../interfaces/responses';
 import { Injectable, inject, signal } from '@angular/core';
-import { UserLogin } from '../interfaces/user';
+import { UserLogin, tokenGoogle } from '../interfaces/user';
 import { Observable, map, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -33,6 +33,18 @@ export class AuthService {
    */
   login(data: UserLogin): Observable<void> {
     return this.#http.post<TokenResponse>('auth/login', data).pipe(
+      map((r) => {
+        localStorage.setItem('token', r.accessToken);
+        this.#logged.set(true);
+      })
+    );
+  }
+
+  loginGoogle (data: string): Observable<void> {
+    const dataSend:tokenGoogle={
+      token: data
+    }
+    return this.#http.post<TokenResponse>('auth/google', dataSend).pipe(
       map((r) => {
         localStorage.setItem('token', r.accessToken);
         this.#logged.set(true);

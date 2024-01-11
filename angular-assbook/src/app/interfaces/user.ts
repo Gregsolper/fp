@@ -28,3 +28,7 @@ export interface UserAvatarEdit {
 export interface UserPasswordEdit {
   password: string;
 }
+
+export interface tokenGoogle {
+  token: string;
+}

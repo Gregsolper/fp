@@ -11,11 +11,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InfoModalComponent } from '../modals/info-modal/info-modal.component';
 
 @Component({
-  selector: 'menu',
+  selector: 'navmenu',
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
-  templateUrl: './menu.component.html',
-  styleUrl: './menu.component.css',
+  templateUrl: './nav-menu.component.html',
+    styleUrl: './nav-menu.component.css',
 })
 export class MenuComponent {
   title = 'Angular-Assbook';

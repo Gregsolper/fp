@@ -13,99 +13,109 @@ import { UserLogin } from '../../interfaces/user';
 import { AuthService } from '../auth.service';
 import { InfoModalComponent } from '../../modals/info-modal/info-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {
-  ReactiveFormsModule,
-  NonNullableFormBuilder,
-} from '@angular/forms';
+import { ReactiveFormsModule, NonNullableFormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'login',
   standalone: true,
-  imports: [ReactiveFormsModule,CommonModule, FormsModule, GoogleLoginDirective,FbLoginDirective],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    FormsModule,
+    GoogleLoginDirective,
+    FbLoginDirective,
+  ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
-export class LoginComponent implements OnInit, OnDestroy{
+export class LoginComponent implements OnInit, OnDestroy {
   #loadGoogle = inject(LoadGoogleApiService);
 
   iconGoogle = faGoogle;
   credentialsSub!: Subscription;
   iconFacebook = faFacebook;
-  #router = inject (Router);
+  #router = inject(Router);
   #authService = inject(AuthService);
-  #titleService = inject (Title);
-  #modalService = inject (NgbModal);
+  #titleService = inject(Title);
+  #modalService = inject(NgbModal);
   #formBuilder = inject(NonNullableFormBuilder);
 
-
-  loginForm = this.#formBuilder.group ({
-    email: ['',[Validators.required, Validators.email]],
-    password: ['', [Validators.required]]
+  loginForm = this.#formBuilder.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
   });
 
   ngOnInit(): void {
-    this.#titleService.setTitle("Posts|Login ");
-    this.credentialsSub = this.#loadGoogle.credential$.subscribe(
-      resp => console.log(resp.credential) // Send this to your back-end
-    );
+    this.#titleService.setTitle('Posts|Login ');
+    this.credentialsSub = this.#loadGoogle.credential$.subscribe((resp) => {
+      console.log(resp.credential); // Send this to your back-end
+
+      this.#authService.loginGoogle(resp.credential).subscribe({
+        next : (resp) => {
+                    console.log(resp);
+                    this.#router.navigate(['/posts']);
+                  },
+        error :   (error) => {
+          console.log(error.statusText);
+          this.callInfoModal('Could not login', error.statusText);
+          this.loginForm.controls.email.enable;
+        },
+      });
+    });
+
   }
 
-  async login () {
-
+  async login() {
     const location = await MyGeolocationService.getLocation();
     const email = this.loginForm.controls.email.value;
     const password = this.loginForm.controls.password.value;
     const user: UserLogin = {
-        email: email,
-        password: password,
-        lat: location.latitude,
-        lng: location.longitude,
+      email: email,
+      password: password,
+      lat: location.latitude,
+      lng: location.longitude,
     };
-    this.#authService
-        .login(user).subscribe({
-          next: async () => {
-
-            await this.callInfoModal ("Wellcome","enjoy posts");
-            this.#router.navigate(['/posts']);
-          },
-          error: async (error) =>{
-            await this.callInfoModal ("Could not login", error.message);
-          }
-        });
-
+    this.#authService.login(user).subscribe({
+      next: async () => {
+        await this.callInfoModal('Wellcome', 'enjoy posts');
+        this.#router.navigate(['/posts']);
+      },
+      error: async (error) => {
+        await this.callInfoModal('Could not login', error.message);
+      },
+    });
   }
 
-  goRegister (){
+  goRegister() {
     this.#router.navigate(['/auth/register']);
   }
   ngOnDestroy(): void {
     this.credentialsSub.unsubscribe();
-}
+  }
 
-loggedFacebook(resp: fb.StatusResponse) {
-  // Send this to your server
-  console.log(resp.authResponse.accessToken);
-}
+  loggedFacebook(resp: fb.StatusResponse) {
+    // Send this to your server
+    console.log(resp.authResponse.accessToken);
+  }
 
-showError(error: unknown) {
-  console.error(error);
-}
+  showError(error: unknown) {
+    console.error(error);
+  }
 
-callInfoModal (title:string, body:string){
-  const modalRef = this.#modalService.open(InfoModalComponent);
-  modalRef.componentInstance.title = title;
-  modalRef.componentInstance.body = body;
-  return modalRef.result.catch(()=>false);
-}
-validClasses(
-  formControl: FormControl,
-  validClass: string,
-  errorClass: string
-) {
-  return {
-    [validClass]: formControl.touched && formControl.valid,
-    [errorClass]: formControl.touched && formControl.invalid,
-  };
-}
-
+  async callInfoModal(title: string, body: string) {
+    const modalRef = this.#modalService.open(InfoModalComponent);
+    modalRef.componentInstance.title = title;
+    modalRef.componentInstance.body = body;
+    return modalRef.result.catch(() => false);
+  }
+  validClasses(
+    formControl: FormControl,
+    validClass: string,
+    errorClass: string
+  ) {
+    return {
+      [validClass]: formControl.touched && formControl.valid,
+      [errorClass]: formControl.touched && formControl.invalid,
+    };
+  }
 }

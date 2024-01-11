@@ -1,4 +1,4 @@
-import { MenuComponent } from './menu/menu.component';
+import { MenuComponent } from './nav-menu/nav-menu.component';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PostsPageComponent } from './posts/posts-page/posts-page.component';
